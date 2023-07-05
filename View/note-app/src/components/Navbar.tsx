@@ -36,12 +36,12 @@ function Navbar() {
     setAnchorElUser(null);
   };
 
-  //   const LinkBehavior = React.forwardRef<any, Omit<RouterLinkProps, "to">>(
-  //     (props, ref) => <RouterLink ref={ref} to="/" {...props} role={undefined} />
-  //   );
-
   return (
-    <AppBar position="static">
+    <AppBar
+      id="navbar"
+      position="static"
+      sx={{ height: { xs: "60px", md: "70px" } }}
+    >
       <Container
         maxWidth={false}
         sx={{ justifyContent: "space-between", padding: 0, m: 0 }}
@@ -107,7 +107,7 @@ function Navbar() {
             variant="h5"
             noWrap
             component="a"
-            href=""
+            href="/"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
