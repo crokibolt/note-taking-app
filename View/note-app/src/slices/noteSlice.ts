@@ -31,12 +31,10 @@ export const notesSlice = createSlice({
             let newState = [...state.value];
             newState.push({id: uuivd4(), ...action.payload});  
             state.value = newState;
-            console.log(state.value)
         },
         remove : (state, action: PayloadAction<string>) => {
             let newState = [...state.value];
             state.value = newState.filter(n => n.id != action.payload);
-            console.log(state.value);
         }
     }
 

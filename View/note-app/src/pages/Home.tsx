@@ -35,7 +35,7 @@ function Home() {
         }}
       >
         {notes.map((x) => (
-          <NoteCard note={x} handleRemove={removeNote} />
+          <NoteCard key={x.id} note={x} handleRemove={removeNote} />
         ))}
       </Box>
     </Container>
