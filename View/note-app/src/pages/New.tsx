@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import { useAppDispatch } from "../hooks/redux";
 import { add } from "../slices/noteSlice";
+import { useNavigate } from "react-router-dom";
 
 function New() {
   const InitCategories = ["Lifestyle", "Food", "Work", "Fitness"];
@@ -18,6 +19,7 @@ function New() {
   const [options, setOptions] = useState(InitCategories);
   const [body, setBody] = useState("");
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -29,8 +31,11 @@ function New() {
   };
 
   const handleAdd = () => {
-    dispatch(add({ title, categories: selectedCategories, body }));
-    resetState();
+    if (title.length > 0 && selectedCategories.length > 0 && body.length > 0) {
+      dispatch(add({ title, categories: selectedCategories, body }));
+      resetState();
+      navigate("/");
+    }
   };
 
   const resetState = () => {
@@ -65,6 +70,7 @@ function New() {
           }}
         >
           <TextField
+            required
             id="title-input"
             label="Title"
             variant="outlined"
@@ -121,6 +127,7 @@ function New() {
           />
         </Box>
         <TextField
+          required
           id="content-input"
           label="Content"
           variant="outlined"

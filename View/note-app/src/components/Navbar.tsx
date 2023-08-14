@@ -12,7 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import ClassIcon from "@mui/icons-material/Class";
 import { useState } from "react";
-import { Link, Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 const pages = ["new"];
 const settings = ["Logout"];

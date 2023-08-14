@@ -36,6 +36,7 @@ export const notesSlice = createSlice({
         remove : (state, action: PayloadAction<string>) => {
             let newState = [...state.value];
             state.value = newState.filter(n => n.id != action.payload);
+            console.log(state.value);
         }
     }
 
