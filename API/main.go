@@ -14,9 +14,12 @@ func init() {
 func main() {
 	router := gin.Default()
 
-	router.GET("/api/", controllers.Notes)
-	router.POST("api/note", controllers.NotesCreate)
-	router.DELETE("api/note/:id", controllers.NotesDelete)
+	api := router.Group("/api")
+
+	api.GET("/note", controllers.Notes)
+	api.POST("/note", controllers.NotesCreate)
+	api.DELETE("/note/:id", controllers.NotesDelete)
+	api.POST("/user", controllers.Register)
 
 	router.Run()
 }
