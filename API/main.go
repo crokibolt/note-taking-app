@@ -16,6 +16,7 @@ func main() {
 
 	router.GET("/api/", controllers.Notes)
 	router.POST("api/note", controllers.NotesCreate)
+	router.DELETE("api/note/:id", controllers.NotesDelete)
 
 	router.Run()
 }

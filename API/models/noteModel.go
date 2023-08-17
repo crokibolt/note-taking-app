@@ -10,4 +10,5 @@ type Note struct {
 	Title      string
 	Categories pq.StringArray `gorm:"type:text[]"`
 	Body       string
+	UserID     uint
 }

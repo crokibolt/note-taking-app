@@ -44,3 +44,11 @@ func NotesCreate(ctx *gin.Context) {
 		"note": note,
 	})
 }
+
+func NotesDelete(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	initializers.DB.Delete(&models.Note{}, id)
+
+	ctx.Status(200)
+}
