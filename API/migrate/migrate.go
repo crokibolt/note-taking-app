@@ -11,6 +11,7 @@ func init() {
 }
 
 func main() {
-
+	// initializers.DB.Exec("DROP TABLE notes")
+	// initializers.DB.Exec("DROP TABLE users")
 	initializers.DB.AutoMigrate(&models.User{}, &models.Note{})
 }

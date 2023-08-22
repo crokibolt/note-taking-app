@@ -13,14 +13,18 @@ func Notes(ctx *gin.Context) {
 	uid, err := helpers.ExtractTokenID(ctx)
 
 	if err != nil {
-		ctx.Status(400)
+		ctx.JSON(400, gin.H{
+			"message": err.Error(),
+		})
 		return
 	}
 
-	result := initializers.DB.Where("UserID = ?", uid).Find(&notes)
+	result := initializers.DB.Where("user_id = ?", uid).Find(&notes)
 
 	if result.Error != nil {
-		ctx.Status(400)
+		ctx.JSON(400, gin.H{
+			"message": err.Error(),
+		})
 		return
 	}
 
@@ -69,7 +73,7 @@ func NotesDelete(ctx *gin.Context) {
 
 	id := ctx.Param("id")
 
-	initializers.DB.Where("UserID = ?", uid).Delete(&models.Note{}, id)
+	initializers.DB.Where("user_id = ?", uid).Delete(&models.Note{}, id)
 
 	ctx.Status(200)
 }

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"errors"
+	"fmt"
 	"html"
 	"strings"
 
@@ -10,14 +11,13 @@ import (
 	"github.com/crokibolt/note-taking-app/API/models"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 )
 
 func userExists(username string) (models.User, bool) {
 	var user models.User
-	result := initializers.DB.Model(&models.User{}).Where("username = ?", username).First(&user)
+	err := initializers.DB.Model(models.User{}).Where("username = ?", username).Take(&user).Error
 
-	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+	if err != nil {
 		return user, false
 	} else {
 		return user, true
@@ -78,7 +78,7 @@ func Register(ctx *gin.Context) {
 
 	ctx.Bind(&registerBody)
 	username := html.EscapeString(strings.TrimSpace(registerBody.Username))
-	_, exists := userExists(registerBody.Username)
+	_, exists := userExists(username)
 
 	if exists {
 		ctx.JSON(400, gin.H{
@@ -121,29 +121,23 @@ func Login(ctx *gin.Context) {
 	ctx.Bind(&loginBody)
 	username := html.EscapeString(strings.TrimSpace(loginBody.Username))
 
-	hashed, err := hashPassword(loginBody.Password)
-
-	if err != nil {
-		ctx.JSON(400, gin.H{
-			"message": err.Error(),
-		})
-		return
-	}
-
 	user, exists := userExists(username)
 
 	if !exists {
 		ctx.JSON(400, gin.H{
 			"message": "User not found",
 		})
+		return
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(hashed), []byte(user.Password))
+	fmt.Println(user)
+	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginBody.Password))
 
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
 		ctx.JSON(400, gin.H{
-			"message": "invalid password",
+			"message": "Invalid Password",
 		})
+		return
 	}
 
 	token, err := helpers.GenerateToken(user.ID)
