@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/crokibolt/note-taking-app/API/helpers"
 	"github.com/crokibolt/note-taking-app/API/initializers"
 	"github.com/crokibolt/note-taking-app/API/models"
 	"github.com/gin-gonic/gin"
@@ -9,7 +10,14 @@ import (
 
 func Notes(ctx *gin.Context) {
 	var notes []models.Note
-	result := initializers.DB.Find(&notes)
+	uid, err := helpers.ExtractTokenID(ctx)
+
+	if err != nil {
+		ctx.Status(400)
+		return
+	}
+
+	result := initializers.DB.Where("UserID = ?", uid).Find(&notes)
 
 	if result.Error != nil {
 		ctx.Status(400)
@@ -22,6 +30,12 @@ func Notes(ctx *gin.Context) {
 }
 
 func NotesCreate(ctx *gin.Context) {
+	uid, err := helpers.ExtractTokenID(ctx)
+
+	if err != nil {
+		ctx.Status(400)
+		return
+	}
 
 	var body struct {
 		Title      string
@@ -31,7 +45,7 @@ func NotesCreate(ctx *gin.Context) {
 
 	ctx.Bind(&body)
 
-	note := models.Note{Title: body.Title, Categories: pq.StringArray(body.Categories), Body: body.Body}
+	note := models.Note{Title: body.Title, Categories: pq.StringArray(body.Categories), Body: body.Body, UserID: uid}
 
 	result := initializers.DB.Create(&note)
 
@@ -46,9 +60,16 @@ func NotesCreate(ctx *gin.Context) {
 }
 
 func NotesDelete(ctx *gin.Context) {
+	uid, err := helpers.ExtractTokenID(ctx)
+
+	if err != nil {
+		ctx.Status(400)
+		return
+	}
+
 	id := ctx.Param("id")
 
-	initializers.DB.Delete(&models.Note{}, id)
+	initializers.DB.Where("UserID = ?", uid).Delete(&models.Note{}, id)
 
 	ctx.Status(200)
 }
