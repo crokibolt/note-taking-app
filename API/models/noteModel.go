@@ -7,8 +7,8 @@ import (
 
 type Note struct {
 	gorm.Model
-	Title      string
-	Categories pq.StringArray `gorm:"type:text[]"`
-	Body       string
-	UserID     uint
+	Title      string         `gorm: not null`
+	Categories pq.StringArray `gorm:"type:text[]"; not null`
+	Body       string         `gorm: not null`
+	UserID     uint           `gorm: not null`
 }
