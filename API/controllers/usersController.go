@@ -140,7 +140,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	token, err := helpers.GenerateToken(user.ID)
+	message, err := helpers.GenerateToken(user.ID, ctx)
 
 	if err != nil {
 		ctx.JSON(400, gin.H{
@@ -149,5 +149,5 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(200, gin.H{"token": token})
+	ctx.JSON(200, gin.H{"message": message})
 }

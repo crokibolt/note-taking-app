@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GenerateToken(user_id uint) (string, error) {
+func GenerateToken(user_id uint, ctx *gin.Context) (string, error) {
 
 	token_lifespan, err := strconv.Atoi(os.Getenv("TOKEN_HOUR_LIFESPAN"))
 
@@ -25,8 +25,15 @@ func GenerateToken(user_id uint) (string, error) {
 	claims["exp"] = time.Now().Add(time.Hour * time.Duration(token_lifespan)).Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	return token.SignedString([]byte(os.Getenv("API_SECRET")))
+	tokenString, err := token.SignedString([]byte(os.Getenv("API_SECRET")))
 
+	if err != nil {
+		return "", err
+	}
+
+	ctx.SetCookie("token", tokenString, token_lifespan*3600, "/api/", "https://note-api-v1.onrender.com", true, true)
+
+	return "Successful login", nil
 }
 
 func TokenValid(c *gin.Context) error {
@@ -44,10 +51,16 @@ func TokenValid(c *gin.Context) error {
 }
 
 func ExtractToken(c *gin.Context) string {
-	token := c.Query("token")
-	if token != "" {
-		return token
+	cookie, err := c.Cookie("token")
+
+	if err != nil {
+		return ""
 	}
+
+	if cookie != "" {
+		return cookie
+	}
+
 	bearerToken := c.Request.Header.Get("Authorization")
 	if len(strings.Split(bearerToken, " ")) == 2 {
 		return strings.Split(bearerToken, " ")[1]
