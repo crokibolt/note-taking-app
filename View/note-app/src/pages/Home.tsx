@@ -1,12 +1,14 @@
-import { Box, Container } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { useAppDispatch } from "../hooks/redux";
-import { remove, selectNotes } from "../slices/noteSlice";
+import { isUserLoggedIn, remove, selectNotes } from "../slices/noteSlice";
 import { useState } from "react";
 import store from "../store/store";
 import NoteCard from "../components/NoteCard";
 
 function Home() {
   const [notes, setNotes] = useState(selectNotes(store.getState()));
+  const [logged, setLogged] = useState(isUserLoggedIn(store.getState()));
+
   const dispatch = useAppDispatch();
   const removeNote = (id: string) => {
     dispatch(remove(id));
@@ -34,9 +36,13 @@ function Home() {
           overflowY: "auto",
         }}
       >
-        {notes.map((x) => (
-          <NoteCard key={x.id} note={x} handleRemove={removeNote} />
-        ))}
+        {logged ? (
+          notes.map((x) => (
+            <NoteCard key={x.id} note={x} handleRemove={removeNote} />
+          ))
+        ) : (
+          <Typography variant="h1">Log in to start writing notes!</Typography>
+        )}
       </Box>
     </Container>
   );

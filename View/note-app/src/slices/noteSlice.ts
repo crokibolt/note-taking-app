@@ -16,11 +16,13 @@ interface NoteDTO {
 }
 
 interface notesState {
-    value : Note[]
+    value : Note[],
+    logged: boolean
 }
 
 const initialState : notesState = {
-    value: []
+    value: [],
+    logged: false
 }
 
 export const notesSlice = createSlice({
@@ -35,14 +37,22 @@ export const notesSlice = createSlice({
         remove : (state, action: PayloadAction<string>) => {
             let newState = [...state.value];
             state.value = newState.filter(n => n.id != action.payload);
+        },
+        logIn : (state) => {
+            state.logged = true;
+        },
+        logOut : (state) => {
+            state.logged = false;
         }
     }
 
 })
 
 
-export const {add, remove} = notesSlice.actions;
+export const {add, remove, logIn, logOut} = notesSlice.actions;
 
 export const selectNotes = (state: RootState) => state.notes.value
+
+export const isUserLoggedIn = (state: RootState) => state.notes.logged
 
 export default notesSlice.reducer;
