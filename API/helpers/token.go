@@ -31,7 +31,7 @@ func GenerateToken(user_id uint, ctx *gin.Context) (string, error) {
 		return "", err
 	}
 
-	ctx.SetCookie("token", tokenString, token_lifespan*3600, "/api/", "https://note-api-v1.onrender.com", true, true)
+	ctx.SetCookie("token", tokenString, token_lifespan*3600, "/api/", "localhost", true, true)
 
 	return "Successful login", nil
 }

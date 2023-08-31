@@ -1,9 +1,15 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import React, { useState } from "react";
+import { useAppDispatch } from "../hooks/redux";
+import { useNavigate } from "react-router-dom";
+import { logIn } from "../slices/noteSlice";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -12,6 +18,43 @@ function Login() {
     if (e.target.value != null) {
       setFunction(e.target.value);
     }
+  };
+
+  const resetState = () => {
+    setUsername("");
+    setPassword("");
+    setError(false);
+  };
+
+  const handleLogin = () => {
+    const reqBody = {
+      Username: username.trim(),
+      Password: password,
+    };
+
+    console.log(JSON.stringify(reqBody));
+
+    fetch("https://note-api-v1.onrender.com/api/user/login", {
+      method: "POST",
+      mode: "cors",
+      body: JSON.stringify(reqBody),
+    }).then(
+      (result) => {
+        if (result.ok) {
+          dispatch(logIn());
+          resetState();
+          navigate("/");
+        } else {
+          console.error(result);
+          setError(true);
+        }
+      },
+      (error) => {
+        resetState();
+        setError(true);
+        console.error(error);
+      }
+    );
   };
 
   return (
@@ -23,7 +66,9 @@ function Login() {
         py: 4,
       }}
     >
-      <Typography variant="h4">Register</Typography>
+      <Typography variant="h4" sx={{ textAlign: "center" }}>
+        Login
+      </Typography>
       <Box
         sx={{
           width: "85vw",
@@ -60,9 +105,18 @@ function Login() {
           }}
         />
 
-        <Button variant="contained" sx={{ width: "60%", mx: "auto" }}>
-          Register
+        <Button
+          variant="contained"
+          sx={{ width: "60%", mx: "auto" }}
+          onClick={handleLogin}
+        >
+          Login
         </Button>
+        {error && (
+          <Typography variant="h6" sx={{ color: "red", textAlign: "center" }}>
+            Incorrect username or password
+          </Typography>
+        )}
       </Box>
     </Container>
   );
