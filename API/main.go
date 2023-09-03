@@ -7,6 +7,7 @@ import (
 	"github.com/crokibolt/note-taking-app/API/controllers"
 	"github.com/crokibolt/note-taking-app/API/initializers"
 	"github.com/crokibolt/note-taking-app/API/middlewares"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,7 +18,12 @@ func init() {
 
 func main() {
 	router := gin.Default()
-	router.Use(CORSMiddleware())
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5173", "https://crokibolt.github.io/note-taking-app"},
+		AllowMethods:     []string{"PUT", "POST", "OPTIONS", "GET"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "Accept", "Cache-Control", "X-Requested-With"},
+		AllowCredentials: true,
+	}))
 
 	api := router.Group("/api")
 
@@ -37,21 +43,5 @@ func main() {
 	}
 	if err := router.Run(":" + port); err != nil {
 		log.Panicf("error: %s", err)
-	}
-}
-
-func CORSMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173/")
-		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
-
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(200)
-			return
-		}
-
-		c.Next()
 	}
 }
