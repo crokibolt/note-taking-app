@@ -53,14 +53,14 @@ func TokenValid(c *gin.Context) error {
 }
 
 func ExtractToken(c *gin.Context) string {
-	cookie, err := c.Cookie("token")
+	cookie, err := c.Request.Cookie("token")
 
 	if err != nil {
 		return ""
 	}
 
-	if cookie != "" {
-		return cookie
+	if cookie != nil {
+		return cookie.Value
 	}
 
 	bearerToken := c.Request.Header.Get("Authorization")
