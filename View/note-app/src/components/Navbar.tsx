@@ -11,7 +11,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import ClassIcon from "@mui/icons-material/Class";
 import { useEffect, useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 const pages = ["new"];
 
@@ -25,6 +25,7 @@ function Navbar({ appLogged, logoutFunc }: NavbarProps) {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [username, setUsername] = useState("");
   const [logged, setLogged] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const func = async () => {
@@ -68,13 +69,13 @@ function Navbar({ appLogged, logoutFunc }: NavbarProps) {
         .then((res) => res.json())
         .then((data) => {
           console.log(data.message);
-          window.location.reload();
+          navigate("/note-taking-app/");
+          logoutFunc();
         })
         .then((err) => console.log(err));
     };
 
     func();
-    logoutFunc();
     handleCloseUserMenu();
   };
 
