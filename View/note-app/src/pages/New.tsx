@@ -27,7 +27,8 @@ function New() {
       })
         .then((res) => {
           if (res.status == 401) {
-            navigate("/");
+            navigate("/note-taking-app/");
+            navigate(0);
           }
         })
         .catch((err) => console.log(err));
