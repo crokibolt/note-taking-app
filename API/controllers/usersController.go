@@ -50,7 +50,7 @@ func CurrentUser(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.JSON(400, gin.H{
-			"error": err.Error(),
+			"error": err,
 		})
 		return
 	}
@@ -156,7 +156,7 @@ func Logout(ctx *gin.Context) {
 	message, err := helpers.InvalidateSesionCookie(ctx)
 
 	if err != nil {
-		ctx.JSON(400, gin.H{
+		ctx.JSON(401, gin.H{
 			"message": err.Error(),
 		})
 	}
