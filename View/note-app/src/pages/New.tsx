@@ -59,11 +59,13 @@ function New() {
           },
           credentials: "include",
           body: JSON.stringify(reqBody),
-        }).then(() => resetState());
+        }).then(() => {
+          resetState();
+          navigate("/note-taking-app/");
+          navigate(0);
+        });
       };
       func();
-      navigate("/note-taking-app/");
-      navigate(0);
     }
   };
 
