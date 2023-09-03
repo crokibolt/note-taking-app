@@ -1,19 +1,53 @@
 import { Box, Container, Typography } from "@mui/material";
 import { useAppDispatch } from "../hooks/redux";
-import { isUserLoggedIn, remove, selectNotes } from "../slices/noteSlice";
-import { useState } from "react";
+import { remove, selectNotes } from "../slices/noteSlice";
+import { useEffect, useState } from "react";
 import store from "../store/store";
 import NoteCard from "../components/NoteCard";
 
 function Home() {
   const [notes, setNotes] = useState(selectNotes(store.getState()));
-  const [logged, setLogged] = useState(isUserLoggedIn(store.getState()));
+  const [logged, setLogged] = useState(false);
 
   const dispatch = useAppDispatch();
-  const removeNote = (id: string) => {
-    dispatch(remove(id));
-    setNotes(selectNotes(store.getState()));
+
+  const fetchNotes = async () => {
+    const resp = await fetch("https://note-api-v1.onrender.com/api/note/", {
+      method: "GET",
+      mode: "cors",
+      credentials: "include",
+    });
+
+    resp
+      .json()
+      .then((data) => {
+        setLogged(true);
+        setNotes(data.notes);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLogged(false);
+      });
   };
+
+  const removeNote = (id: string) => {
+    const deleteNote = async () => {
+      await fetch(`https://note-api-v1.onrender.com/api/note/${id}`, {
+        method: "DELETE",
+        mode: "cors",
+        credentials: "include",
+      })
+        .then(() => fetchNotes())
+        .catch((err) => console.log(err));
+    };
+
+    deleteNote();
+  };
+
+  useEffect(() => {
+    fetchNotes();
+  }, []);
+
   return (
     <Container
       maxWidth={false}
@@ -38,7 +72,7 @@ function Home() {
       >
         {logged ? (
           notes.map((x) => (
-            <NoteCard key={x.id} note={x} handleRemove={removeNote} />
+            <NoteCard key={x.ID} note={x} handleRemove={removeNote} />
           ))
         ) : (
           <Typography variant="h1">Log in to start writing notes!</Typography>

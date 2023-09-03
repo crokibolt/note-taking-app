@@ -2,10 +2,10 @@ import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 
 interface Note {
-  id: string;
-  title: string;
-  categories: string[];
-  body: string;
+  ID: string;
+  Title: string;
+  Categories: string[];
+  Body: string;
 }
 
 interface CardProps {
@@ -15,6 +15,7 @@ interface CardProps {
 
 function NoteCard(props: CardProps) {
   const [show, setShow] = useState(false);
+
   return (
     <Box
       sx={{
@@ -32,7 +33,7 @@ function NoteCard(props: CardProps) {
       onMouseOver={() => setShow(true)}
       onMouseOut={() => setShow(false)}
     >
-      <Typography variant="h3">{props.note.title}</Typography>
+      <Typography variant="h3">{props.note.Title}</Typography>
       <Typography
         variant="subtitle1"
         sx={{
@@ -41,17 +42,17 @@ function NoteCard(props: CardProps) {
           borderBottom: "1px solid black",
         }}
       >
-        Categories: {props.note.categories.join(" ")}
+        Categories: {props.note.Categories.join(" ")}
       </Typography>
       <Typography variant="body1" sx={{ marginTop: 2 }}>
-        {props.note.body}
+        {props.note.Body}
       </Typography>
       {show && (
         <Button
           variant="contained"
           color="error"
           sx={{ mt: "auto", mx: "auto" }}
-          onClick={() => props.handleRemove(props.note.id)}
+          onClick={() => props.handleRemove(props.note.ID)}
         >
           Delete
         </Button>

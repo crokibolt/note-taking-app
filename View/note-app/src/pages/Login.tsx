@@ -2,9 +2,14 @@ import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useAppDispatch } from "../hooks/redux";
 import { useNavigate } from "react-router-dom";
-import { logIn } from "../slices/noteSlice";
+import { logIn, setReduxUsername } from "../slices/noteSlice";
 
-function Login() {
+type LoginProps = {
+  logIn: () => void;
+  setNavUsername: (username: string) => void;
+};
+
+function Login({ logIn, setNavUsername }: LoginProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
@@ -31,19 +36,21 @@ function Login() {
       Username: username.trim(),
       Password: password,
     };
-
-    console.log(JSON.stringify(reqBody));
-
     fetch("https://note-api-v1.onrender.com/api/user/login", {
       method: "POST",
-      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
       body: JSON.stringify(reqBody),
     }).then(
       (result) => {
         if (result.ok) {
-          dispatch(logIn());
+          logIn();
+          setNavUsername(username);
+          console.log("Successful login");
           resetState();
-          navigate("/");
+          navigate("/note-taking-app/");
         } else {
           console.error(result);
           setError(true);

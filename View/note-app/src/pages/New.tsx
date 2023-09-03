@@ -6,7 +6,7 @@ import {
   Container,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch } from "../hooks/redux";
 import { add } from "../slices/noteSlice";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +21,23 @@ function New() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const func = async () => {
+      await fetch("https://note-api-v1.onrender.com/api/note/logCheck", {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
+      })
+        .then((res) => {
+          if (res.status == 401) {
+            navigate("/");
+          }
+        })
+        .catch((err) => console.log(err));
+    };
+    func();
+  }, []);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     setFunction: (a: string) => void
@@ -32,9 +49,24 @@ function New() {
 
   const handleAdd = () => {
     if (title.length > 0 && selectedCategories.length > 0 && body.length > 0) {
-      dispatch(add({ title, categories: selectedCategories, body }));
-      resetState();
-      navigate("/");
+      const reqBody = {
+        Title: title.trim(),
+        Categories: selectedCategories,
+        Body: body,
+      };
+      const func = async () => {
+        await fetch("https://note-api-v1.onrender.com/api/note/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(reqBody),
+        }).then(() => resetState());
+      };
+      console.log(reqBody);
+      func();
+      navigate("/note-taking-app/");
     }
   };
 

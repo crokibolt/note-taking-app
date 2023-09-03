@@ -6,24 +6,42 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import ClassIcon from "@mui/icons-material/Class";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import store from "../store/store";
-import { isUserLoggedIn } from "../slices/noteSlice";
 
 const pages = ["new"];
-const settings = ["Logout"];
 
-function Navbar() {
+type NavbarProps = {
+  appLogged: boolean;
+  logoutFunc: () => void;
+};
+
+function Navbar({ appLogged, logoutFunc }: NavbarProps) {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [username, setUsername] = useState("");
-  const [logged, setLogged] = useState(isUserLoggedIn(store.getState()));
+  const [logged, setLogged] = useState(false);
+
+  useEffect(() => {
+    const func = async () => {
+      await fetch("https://note-api-v1.onrender.com/api/note/logCheck", {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setUsername(data.data.Username);
+          setLogged(true);
+        })
+        .catch((err) => err.Error());
+    };
+    func();
+  }, [appLogged]);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -38,6 +56,26 @@ function Navbar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogout = () => {
+    const func = async () => {
+      await fetch("https://note-api-v1.onrender.com/api/user/logout", {
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data.message);
+          window.location.reload();
+        })
+        .then((err) => console.log(err));
+    };
+
+    func();
+    logoutFunc();
+    handleCloseUserMenu();
   };
 
   return (
@@ -100,7 +138,7 @@ function Navbar() {
               }}
             >
               <MenuItem key="new" onClick={handleCloseNavMenu}>
-                <Button component={RouterLink} to="/new">
+                <Button component={RouterLink} to="/note-taking-app/new">
                   NEW
                 </Button>
               </MenuItem>
@@ -139,7 +177,7 @@ function Navbar() {
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: "white", display: "block" }}
                   component={RouterLink}
-                  to={`/${page}`}
+                  to={`/note-taking-app/${page}`}
                 >
                   {page}
                 </Button>
@@ -147,25 +185,27 @@ function Navbar() {
           </Box>
 
           <Box sx={{ flexGrow: 0, ml: "auto" }}>
-            {/* <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton> */}
             {logged ? (
               <Tooltip title="Open settings">
-                <Button onClick={handleOpenUserMenu}>{username}</Button>
+                <Button
+                  onClick={handleOpenUserMenu}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {username}
+                </Button>
               </Tooltip>
             ) : (
               <Box sx={{ display: "flex" }}>
                 <Button
                   component={RouterLink}
-                  to="/login"
+                  to="/note-taking-app/login"
                   sx={{ my: 2, color: "white", display: "block" }}
                 >
                   Log in
                 </Button>
                 <Button
                   component={RouterLink}
-                  to="/register"
+                  to="/note-taking-app/register"
                   sx={{ my: 2, color: "white", display: "block" }}
                 >
                   Register
@@ -188,11 +228,9 @@ function Navbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem onClick={handleLogout}>
+                <Typography textAlign="center">Logout</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

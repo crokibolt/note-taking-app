@@ -1,10 +1,12 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -13,6 +15,43 @@ function Register() {
     if (e.target.value != null) {
       setFunction(e.target.value);
     }
+  };
+
+  const resetState = () => {
+    setUsername("");
+    setPassword("");
+    setPasswordConfirm("");
+  };
+
+  const handleRegister = () => {
+    const reqBody = {
+      Username: username.trim(),
+      Password: password,
+    };
+    //"https://note-api-v1.onrender.com/api/user/login"
+    //"http://localhost:8080/api/user/login"
+    fetch("https://note-api-v1.onrender.com/api/user/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(reqBody),
+    }).then(
+      (result) => {
+        if (result.ok) {
+          console.log("Successful register");
+          resetState();
+          navigate("/note-taking-app/");
+        } else {
+          console.error(result);
+        }
+      },
+      (error) => {
+        resetState();
+        console.error(error);
+      }
+    );
   };
 
   return (
@@ -76,7 +115,11 @@ function Register() {
           }}
         />
 
-        <Button variant="contained" sx={{ width: "60%", mx: "auto" }}>
+        <Button
+          variant="contained"
+          sx={{ width: "60%", mx: "auto" }}
+          onClick={handleRegister}
+        >
           Register
         </Button>
       </Box>
