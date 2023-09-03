@@ -94,7 +94,7 @@ function Navbar({ appLogged, logoutFunc }: NavbarProps) {
             variant="h6"
             noWrap
             component={RouterLink}
-            to="/"
+            to="/note-taking-app/"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
