@@ -33,7 +33,7 @@ func GenerateToken(user_id uint, ctx *gin.Context) (string, error) {
 	}
 
 	ctx.SetSameSite(http.SameSiteNoneMode)
-	ctx.SetCookie("sesion-cookie", tokenString, 3600, "/", "note-api-v1.onrender.com", true, false)
+	ctx.SetCookie("sesion-cookie", tokenString, 3600, "/", "note-api-v1.onrender.com", true, true)
 
 	return "Successful login", nil
 }
@@ -95,7 +95,7 @@ func ExtractTokenID(c *gin.Context) (uint, error) {
 
 func InvalidateSesionCookie(ctx *gin.Context) (string, error) {
 	ctx.SetSameSite(http.SameSiteNoneMode)
-	ctx.SetCookie("sesion-cookie", "", 3600, "/", "note-api-v1.onrender.com", true, false)
+	ctx.SetCookie("sesion-cookie", "", 3600, "/", "note-api-v1.onrender.com", true, true)
 
 	return "Successful logout", nil
 }
