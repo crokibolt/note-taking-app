@@ -1,19 +1,15 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { useAppDispatch } from "../hooks/redux";
 import { useNavigate } from "react-router-dom";
-import { logIn, setReduxUsername } from "../slices/noteSlice";
 
 type LoginProps = {
   logIn: () => void;
-  setNavUsername: (username: string) => void;
 };
 
-function Login({ logIn, setNavUsername }: LoginProps) {
+function Login({ logIn }: LoginProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleChange = (
@@ -47,7 +43,6 @@ function Login({ logIn, setNavUsername }: LoginProps) {
       (result) => {
         if (result.ok) {
           logIn();
-          setNavUsername(username);
           console.log("Successful login");
           resetState();
           navigate("/note-taking-app/");

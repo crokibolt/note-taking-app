@@ -1,6 +1,5 @@
 import { Box, Container, Typography } from "@mui/material";
-import { useAppDispatch } from "../hooks/redux";
-import { remove, selectNotes } from "../slices/noteSlice";
+import { selectNotes } from "../slices/noteSlice";
 import { useEffect, useState } from "react";
 import store from "../store/store";
 import NoteCard from "../components/NoteCard";
@@ -8,8 +7,6 @@ import NoteCard from "../components/NoteCard";
 function Home() {
   const [notes, setNotes] = useState(selectNotes(store.getState()));
   const [logged, setLogged] = useState(false);
-
-  const dispatch = useAppDispatch();
 
   const fetchNotes = async () => {
     const resp = await fetch("https://note-api-v1.onrender.com/api/note/", {

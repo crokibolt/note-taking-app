@@ -7,12 +7,9 @@ import Note from "./pages/Note";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import { useState } from "react";
-import { getUsername, isUserLoggedIn } from "./slices/noteSlice";
-import store from "./store/store";
 
 function App() {
   const [logged, setLogged] = useState(false);
-  const [username, setUsername] = useState("");
 
   const logIn = () => {
     setLogged(true);
@@ -32,7 +29,7 @@ function App() {
         <Route path="/note-taking-app/register" element={<Register />} />
         <Route
           path="/note-taking-app/login"
-          element={<Login logIn={logIn} setNavUsername={setUsername} />}
+          element={<Login logIn={logIn} />}
         />
       </Routes>
     </>

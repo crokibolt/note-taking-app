@@ -1,7 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store/store";
 import { v4 as uuivd4 } from "uuid";
-import { act } from "react-dom/test-utils";
 
 interface Note {
     ID : string,

@@ -7,8 +7,6 @@ import {
   TextField,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useAppDispatch } from "../hooks/redux";
-import { add } from "../slices/noteSlice";
 import { useNavigate } from "react-router-dom";
 
 function New() {
@@ -18,7 +16,6 @@ function New() {
   const [selectedCategories, setCategories] = useState(categories);
   const [options, setOptions] = useState(InitCategories);
   const [body, setBody] = useState("");
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
