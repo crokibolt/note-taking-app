@@ -32,6 +32,7 @@ func GenerateToken(user_id uint, ctx *gin.Context) (string, error) {
 	}
 
 	ctx.SetCookie("token", tokenString, token_lifespan*3600, "/", "localhost", true, true)
+	ctx.SetCookie("sample-cookie", tokenString, token_lifespan*3600, "/", "localhost", false, false)
 
 	return "Successful login", nil
 }
