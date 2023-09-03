@@ -151,3 +151,15 @@ func Login(ctx *gin.Context) {
 
 	ctx.JSON(200, gin.H{"message": message})
 }
+
+func Logout(ctx *gin.Context) {
+	message, err := helpers.InvalidateSesionCookie(ctx)
+
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+	}
+
+	ctx.JSON(200, gin.H{"message": message})
+}

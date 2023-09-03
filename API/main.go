@@ -29,6 +29,7 @@ func main() {
 
 	api.POST("/user/register", controllers.Register)
 	api.POST("/user/login", controllers.Login)
+	api.POST("/user/logout", controllers.Logout)
 
 	protected := router.Group("/api/note")
 	protected.Use(middlewares.JwtAuthMiddleware())
