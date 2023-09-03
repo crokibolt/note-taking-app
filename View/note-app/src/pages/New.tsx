@@ -63,7 +63,7 @@ function New() {
       };
       func();
       navigate("/note-taking-app/");
-      window.location.reload();
+      navigate(0);
     }
   };
 
