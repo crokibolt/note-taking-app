@@ -36,6 +36,7 @@ func main() {
 	protected.GET("/", controllers.Notes)
 	protected.POST("/", controllers.NotesCreate)
 	protected.DELETE("/:id", controllers.NotesDelete)
+	protected.GET("/logCheck", controllers.CurrentUser)
 
 	port := os.Getenv("PORT")
 	if port == "" {
