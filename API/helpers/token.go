@@ -53,7 +53,7 @@ func TokenValid(c *gin.Context) error {
 }
 
 func ExtractToken(c *gin.Context) string {
-	cookie, err := c.Request.Cookie("token")
+	cookie, err := c.Request.Cookie("sesion-cookie")
 
 	if err != nil {
 		return ""
