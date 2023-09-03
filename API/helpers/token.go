@@ -2,7 +2,6 @@ package helpers
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 	"strconv"
 	"strings"
@@ -32,8 +31,7 @@ func GenerateToken(user_id uint, ctx *gin.Context) (string, error) {
 		return "", err
 	}
 
-	ctx.SetSameSite(http.SameSiteNoneMode)
-	ctx.SetCookie("token", tokenString, token_lifespan*3600, "/", "localhost", true, true)
+	ctx.SetCookie("token", tokenString, token_lifespan*3600, "/", "localhost", false, true)
 	ctx.SetCookie("sample-cookie", "sample content", token_lifespan*3600, "/", "https://note-api-v1.onrender.com", false, false)
 	ctx.SetCookie("sample-cookie", "sample content", token_lifespan*3600, "/", "localhost", false, false)
 
