@@ -28,7 +28,6 @@ function New() {
         .then((res) => {
           if (res.status == 401) {
             navigate("/note-taking-app/");
-            navigate(0);
           }
         })
         .catch((err) => console.log(err));
@@ -62,9 +61,9 @@ function New() {
           body: JSON.stringify(reqBody),
         }).then(() => resetState());
       };
-      console.log(reqBody);
       func();
       navigate("/note-taking-app/");
+      window.location.reload();
     }
   };
 
