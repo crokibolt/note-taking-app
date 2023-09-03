@@ -20,7 +20,7 @@ func main() {
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:5173", "https://crokibolt.github.io/note-taking-app"},
-		AllowMethods:     []string{"PUT", "POST", "OPTIONS", "GET"},
+		AllowMethods:     []string{"PUT", "POST", "OPTIONS", "GET", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "Accept", "Cache-Control", "X-Requested-With"},
 		AllowCredentials: true,
 	}))
