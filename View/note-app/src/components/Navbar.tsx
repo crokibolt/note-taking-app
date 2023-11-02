@@ -69,7 +69,7 @@ function Navbar({ appLogged, logoutFunc }: NavbarProps) {
         .then((res) => res.json())
         .then((data) => {
           console.log(data.message);
-          navigate("/note-taking-app/");
+          navigate("/");
           logoutFunc();
         })
         .then((err) => console.log(err));
@@ -95,7 +95,7 @@ function Navbar({ appLogged, logoutFunc }: NavbarProps) {
             variant="h6"
             noWrap
             component={RouterLink}
-            to="/note-taking-app/"
+            to="/"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -139,7 +139,7 @@ function Navbar({ appLogged, logoutFunc }: NavbarProps) {
               }}
             >
               <MenuItem key="new" onClick={handleCloseNavMenu}>
-                <Button component={RouterLink} to="/note-taking-app/new">
+                <Button component={RouterLink} to="/new">
                   NEW
                 </Button>
               </MenuItem>
@@ -178,7 +178,7 @@ function Navbar({ appLogged, logoutFunc }: NavbarProps) {
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: "white", display: "block" }}
                   component={RouterLink}
-                  to={`/note-taking-app/${page}`}
+                  to={`/${page}`}
                 >
                   {page}
                 </Button>
@@ -199,14 +199,14 @@ function Navbar({ appLogged, logoutFunc }: NavbarProps) {
               <Box sx={{ display: "flex" }}>
                 <Button
                   component={RouterLink}
-                  to="/note-taking-app/login"
+                  to="/login"
                   sx={{ my: 2, color: "white", display: "block" }}
                 >
                   Log in
                 </Button>
                 <Button
                   component={RouterLink}
-                  to="/note-taking-app/register"
+                  to="/register"
                   sx={{ my: 2, color: "white", display: "block" }}
                 >
                   Register

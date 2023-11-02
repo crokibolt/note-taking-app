@@ -42,7 +42,7 @@ function Register() {
         if (result.ok) {
           console.log("Successful register");
           resetState();
-          navigate("/note-taking-app/");
+          navigate("/");
         } else {
           console.error(result);
         }

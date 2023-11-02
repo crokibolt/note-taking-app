@@ -45,7 +45,7 @@ function Login({ logIn }: LoginProps) {
           logIn();
           console.log("Successful login");
           resetState();
-          navigate("/note-taking-app/");
+          navigate("/");
         } else {
           console.error(result);
           setError(true);
