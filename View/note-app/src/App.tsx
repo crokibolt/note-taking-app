@@ -23,12 +23,12 @@ function App() {
     <>
       <Navbar appLogged={logged} logoutFunc={logOut} />
       <Routes>
-        <Route path="/note-taking-app/" element={<Home />} />
-        <Route path="/note-taking-app/new" element={<New />} />
-        <Route path="/note-taking-app/note/:id" element={<Note />} />
-        <Route path="/note-taking-app/register" element={<Register />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/new" element={<New />} />
+        <Route path="/note/:id" element={<Note />} />
+        <Route path="/register" element={<Register />} />
         <Route
-          path="/note-taking-app/login"
+          path="/login"
           element={<Login logIn={logIn} />}
         />
       </Routes>

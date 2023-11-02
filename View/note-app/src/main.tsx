@@ -11,7 +11,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
       <CssBaseline />
-      <BrowserRouter>
+      <BrowserRouter basename={"/note-taking-app"}>
         <App />
       </BrowserRouter>
     </Provider>
